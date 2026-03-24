@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const MessageSchema = new mongoose.Schema({
   senderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  receiverId: { type: mongoose.Schema.Types.ObjectId, required: true },
   text: { type: String, default: "" },
   status: { type: String, enum: ['sent', 'delivered', 'read'], default: 'sent' },
   deleted: { type: Boolean, default: false },
