@@ -11,6 +11,7 @@ const MessageSchema = new mongoose.Schema({
   imageUrl: { type: String, default: "" },
   viewOnce: { type: Boolean, default: false },
   viewed: { type: Boolean, default: false },
+  isForwarded: { type: Boolean, default: false },
   replyTo: { type: mongoose.Schema.Types.ObjectId, ref: 'Message', default: null },
   reactions: [{ emoji: String, userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } }],
   fileName: { type: String, default: "" },

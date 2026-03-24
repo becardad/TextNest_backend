@@ -180,14 +180,18 @@ module.exports = (io) => {
       let messages;
       
       if (group) {
-        messages = await Message.find({ receiverId: group._id }).lean().sort({ createdAt: 1 });
+        messages = await Message.find({ receiverId: group._id })
+          .populate({ path: 'replyTo', select: 'text senderId', populate: { path: 'senderId', select: 'name' } })
+          .lean().sort({ createdAt: 1 });
       } else {
         messages = await Message.find({
           $or: [
             { senderId: req.user, receiverId: req.params.chatId },
             { senderId: req.params.chatId, receiverId: req.user }
           ]
-        }).lean().sort({ createdAt: 1 });
+        })
+          .populate({ path: 'replyTo', select: 'text senderId', populate: { path: 'senderId', select: 'name' } })
+          .lean().sort({ createdAt: 1 });
       }
       res.json(messages);
     } catch (err) {
@@ -220,6 +224,7 @@ module.exports = (io) => {
         type,
         imageUrl,
         viewOnce,
+        isForwarded: req.body.isForwarded || false,
         replyTo: req.body.replyTo || null,
         fileName: req.body.fileName || "",
         fileSize: req.body.fileSize || ""
